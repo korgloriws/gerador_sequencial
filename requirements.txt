@@ -1,0 +1,17 @@
+pandas==2.2.2
+numpy==1.26.4
+openpyxl==3.1.2
+matplotlib==3.8.4
+pyarrow==15.0.2
+torch==2.2.1
+torchvision==0.17.1
+scikit-learn==1.4.2
+seaborn==0.13.2
+flask==3.0.0
+# Bibliotecas para detecção de padrões em sequências
+stumpy
+tsfresh
+tslearn
+statsmodels
+darts
+prophet

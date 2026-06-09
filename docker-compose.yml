@@ -1,0 +1,28 @@
+services:
+  gerador-sequencial:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gerador-sequencial
+    restart: unless-stopped
+    ports:
+      # Porta externa 5080 — não conflita com apps comuns (80/443/3000/8000)
+      - "5080:5000"
+    volumes:
+      - ./data/uploads:/app/uploads
+      - ./data/model_weights.json:/app/model_weights.json
+    environment:
+      - FLASK_ENV=production
+    networks:
+      - gerador-sequencial-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  gerador-sequencial-net:
+    name: gerador-sequencial-net
+    driver: bridge

@@ -1,0 +1,16 @@
+__pycache__
+*.pyc
+*.pyo
+.git
+.gitignore
+.env
+.venv
+venv
+env
+uploads
+data
+*.xlsx
+*.xls
+*.md
+.DS_Store
+Thumbs.db

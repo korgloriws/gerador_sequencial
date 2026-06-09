@@ -1,0 +1,13 @@
+# Dependências para produção (Docker) — PyTorch CPU instalado no Dockerfile
+pandas==2.2.2
+numpy==1.26.4
+openpyxl==3.1.2
+scikit-learn==1.4.2
+flask==3.0.0
+gunicorn==22.0.0
+stumpy
+tsfresh
+tslearn
+statsmodels
+darts
+prophet

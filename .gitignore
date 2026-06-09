@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.env
+uploads/*
+!uploads/.gitkeep
+data/uploads/*
+!data/uploads/.gitkeep
+data/model_weights.json
+*.xlsx
+*.xls
+.DS_Store

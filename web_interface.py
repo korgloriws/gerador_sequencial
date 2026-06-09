@@ -60,7 +60,9 @@ HTML_TEMPLATE = """
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#6b4423">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Pattern Agent - Detecção de Padrões</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
@@ -71,6 +73,11 @@ HTML_TEMPLATE = """
             box-sizing: border-box;
         }
         
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
         body {
             font-family: 'Crimson Text', 'Times New Roman', serif;
             background: #3d2817;
@@ -85,8 +92,18 @@ HTML_TEMPLATE = """
                     rgba(101, 67, 33, 0.05) 4px
                 );
             min-height: 100vh;
+            min-height: 100dvh;
             padding: 20px;
+            padding-left: max(20px, env(safe-area-inset-left));
+            padding-right: max(20px, env(safe-area-inset-right));
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
             color: #2c1810;
+            overflow-x: hidden;
+        }
+
+        #fileName {
+            word-break: break-word;
+            padding: 0 4px;
         }
         
         .container {
@@ -562,6 +579,313 @@ HTML_TEMPLATE = """
         .log-line.warning { 
             color: #b89a5a; 
         }
+
+        /* Chips de números (sequências) */
+        .sequence-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 0;
+        }
+
+        .num-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 8px;
+            background: linear-gradient(135deg, #8b5a2b 0%, #6b4423 100%);
+            color: #f4e8d8;
+            border: 2px solid #5a3419;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .num-chip-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            padding: 0 6px;
+            background: #e8dcc6;
+            color: #5a3419;
+            border: 1px solid #8b5a2b;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        /* Seção de confronto / feedback */
+        .compare-section {
+            margin-top: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0;
+        }
+
+        .action-buttons .btn {
+            margin-top: 0;
+            flex: 1 1 auto;
+            min-width: 140px;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 14px 12px;
+            font-size: 16px;
+            border: 2px solid #8b5a2b;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            background: #f4e8d8;
+            color: #2c1810;
+            -webkit-appearance: none;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #5a3419;
+            cursor: pointer;
+            margin-top: 8px;
+            line-height: 1.4;
+            font-size: 0.95em;
+        }
+
+        .checkbox-label input {
+            margin-top: 4px;
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+        }
+
+        .section-text {
+            color: #5a3419;
+            margin: 12px 0;
+            line-height: 1.5;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            color: #5a3419;
+            font-size: 0.95em;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .progress-track {
+            height: 24px;
+            background: #e8dcc6;
+            border: 2px solid #8b5a2b;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #8b5a2b, #6b4423);
+            transition: width 0.3s ease;
+        }
+
+        /* Tablet e celular */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                overflow-x: hidden;
+            }
+
+            .container {
+                border-width: 4px;
+                box-shadow:
+                    0 0 0 2px #6b4423,
+                    0 0 0 4px #8b5a2b,
+                    0 12px 30px rgba(0, 0, 0, 0.4),
+                    inset 0 0 60px rgba(139, 90, 43, 0.1);
+            }
+
+            .header {
+                padding: 24px 16px;
+            }
+
+            .header h1 {
+                font-size: 1.75em;
+                letter-spacing: 2px;
+                line-height: 1.2;
+                word-break: break-word;
+            }
+
+            .header p {
+                font-size: 1em;
+                letter-spacing: 0.5px;
+            }
+
+            .content {
+                padding: 16px;
+            }
+
+            .upload-section,
+            .result-card,
+            .prediction-box {
+                padding: 20px 16px;
+            }
+
+            .upload-section h2,
+            .results-section h2 {
+                font-size: 1.35em;
+                letter-spacing: 1px;
+            }
+
+            .status-section {
+                padding: 16px;
+                min-height: auto;
+            }
+
+            .status-section h2 {
+                font-size: 1.25em;
+            }
+
+            .status-item {
+                flex-wrap: wrap;
+                padding: 12px 14px;
+                font-size: 0.95em;
+                gap: 10px;
+            }
+
+            .file-input-wrapper {
+                display: block;
+                width: 100%;
+            }
+
+            .file-label,
+            .btn {
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 14px 16px;
+                font-size: 1em;
+                letter-spacing: 1px;
+            }
+
+            .btn {
+                margin-top: 12px;
+            }
+
+            .prediction-number {
+                font-size: 3em;
+                letter-spacing: 4px;
+            }
+
+            .model-predictions {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .model-item {
+                padding: 14px 10px;
+            }
+
+            .model-value {
+                font-size: 1.6em;
+            }
+
+            .log-container {
+                padding: 16px;
+                max-height: 280px;
+                font-size: 0.85em;
+            }
+
+            .num-chip {
+                min-width: 34px;
+                height: 34px;
+                font-size: 0.95em;
+            }
+
+            .num-chip-secondary {
+                min-width: 30px;
+                height: 30px;
+                font-size: 0.9em;
+            }
+
+            .action-buttons .btn {
+                flex: 1 1 100%;
+                min-width: 0;
+            }
+        }
+
+        /* Celulares pequenos */
+        @media (max-width: 480px) {
+            body {
+                padding: 6px;
+            }
+
+            .header h1 {
+                font-size: 1.45em;
+                letter-spacing: 1px;
+            }
+
+            .header p {
+                font-size: 0.9em;
+            }
+
+            .content {
+                padding: 12px;
+            }
+
+            .upload-section,
+            .result-card {
+                padding: 16px 12px;
+            }
+
+            .result-card h3 {
+                font-size: 1.1em;
+                letter-spacing: 1px;
+            }
+
+            .prediction-box {
+                padding: 16px 12px;
+                margin: 16px 0;
+            }
+
+            .sequence-grid {
+                gap: 6px;
+            }
+
+            .num-chip {
+                min-width: 32px;
+                height: 32px;
+                font-size: 0.9em;
+                padding: 0 6px;
+            }
+
+            .num-chip-secondary {
+                min-width: 28px;
+                height: 28px;
+                font-size: 0.85em;
+            }
+
+            .model-predictions {
+                grid-template-columns: 1fr;
+            }
+
+            .confidence-bar {
+                height: 28px;
+            }
+
+            .confidence-fill {
+                font-size: 0.9em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -586,14 +910,14 @@ HTML_TEMPLATE = """
             <div class="status-section">
                 <h2>Status do Processamento</h2>
                 <div id="progressBarSection" style="display: none; margin: 15px 0;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #5a3419; font-size: 0.95em;">
+                    <div class="progress-header">
                         <span id="progressBarText">0/0</span>
                         <span id="progressBarPct">0%</span>
                     </div>
-                    <div style="height: 24px; background: #e8dcc6; border: 2px solid #8b5a2b; border-radius: 4px; overflow: hidden;">
-                        <div id="progressBarFill" style="height: 100%; width: 0%; background: linear-gradient(90deg, #8b5a2b, #6b4423); transition: width 0.3s ease;"></div>
+                    <div class="progress-track">
+                        <div id="progressBarFill" class="progress-fill"></div>
                     </div>
-                    <p id="progressBarMessage" style="margin-top: 6px; color: #6b4423; font-size: 0.9em;"></p>
+                    <p id="progressBarMessage" class="section-text" style="font-size: 0.9em;"></p>
                 </div>
                 <div id="statusContainer"></div>
             </div>
@@ -602,15 +926,18 @@ HTML_TEMPLATE = """
                 <h2>Resultados</h2>
                 <div id="resultsContainer"></div>
                 <div id="compareSection" class="compare-section" style="display: none;">
-                    <p style="margin-top: 25px; color: #5a3419;">Depois de comparar e retreinar, gere outra sequência (sem reprocessar o arquivo):</p>
-                    <button type="button" class="btn" id="generateNewBtn" onclick="generateNewSequence()" style="margin-bottom: 20px;">Gerar nova sequência</button>
-                    <h3 style="margin-top: 30px; color: #5a3419; border-bottom: 2px solid #8b5a2b; padding-bottom: 10px;">Confrontar com sequência correta</h3>
-                    <p style="color: #5a3419; margin: 15px 0;">Informe a sequência correta (15 números). Comparação é por conjunto (não considera ordem).</p>
-                    <input type="text" id="correctSequenceInput" placeholder="Ex: 3, 7, 12, 1, 25, 9, 14, 6, 18, 22, 4, 11, 19, 8, 15" style="width: 100%; max-width: 500px; padding: 12px; font-size: 1em; border: 2px solid #8b5a2b; border-radius: 4px; margin-bottom: 12px;" />
-                    <button type="button" class="btn" id="compareBtn" onclick="compareWithCorrect()">Comparar</button>
-                    <button type="button" class="btn" id="retrainBtn" onclick="retrainWithCorrect()" style="margin-left: 10px;">Retreinar</button>
-                    <label style="display: inline-block; margin-left: 15px; color: #5a3419; cursor: pointer;">
-                        <input type="checkbox" id="fullRetrainCheck" /> Retreinamento completo (re-treina LSTM e modelos; mais lento)
+                    <p class="section-text" style="margin-top: 25px;">Depois de comparar e retreinar, gere outra sequência (sem reprocessar o arquivo):</p>
+                    <button type="button" class="btn" id="generateNewBtn" onclick="generateNewSequence()">Gerar nova sequência</button>
+                    <h3 style="margin-top: 24px; color: #5a3419; border-bottom: 2px solid #8b5a2b; padding-bottom: 10px;">Confrontar com sequência correta</h3>
+                    <p class="section-text">Informe a sequência correta (15 números). Comparação é por conjunto (não considera ordem).</p>
+                    <input type="text" id="correctSequenceInput" class="text-input" placeholder="Ex: 3, 7, 12, 1, 25, 9, 14, 6, 18, 22, 4, 11, 19, 8, 15" inputmode="numeric" autocomplete="off" />
+                    <div class="action-buttons">
+                        <button type="button" class="btn" id="compareBtn" onclick="compareWithCorrect()">Comparar</button>
+                        <button type="button" class="btn" id="retrainBtn" onclick="retrainWithCorrect()">Retreinar</button>
+                    </div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="fullRetrainCheck" />
+                        <span>Retreinamento completo (re-treina LSTM e modelos; mais lento)</span>
                     </label>
                     <div id="compareResult" style="margin-top: 20px;"></div>
                 </div>
@@ -834,7 +1161,7 @@ HTML_TEMPLATE = """
             if (results && listSeqs && listSeqs.length > 0) {
                 listSeqs.forEach((seq, optIndex) => {
                     const sequenceHtml = seq.map((num) =>
-                        `<span style="display: inline-block; padding: 8px 12px; margin: 4px; background: linear-gradient(135deg, #8b5a2b 0%, #6b4423 100%); color: #f4e8d8; border: 2px solid #5a3419; border-radius: 4px; font-weight: bold; font-size: 1.1em; min-width: 40px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${num}</span>`
+                        `<span class="num-chip">${num}</span>`
                     ).join('');
                     const card = document.createElement('div');
                     card.className = 'result-card';
@@ -842,7 +1169,7 @@ HTML_TEMPLATE = """
                     card.innerHTML = `
                         <h3>${title}</h3>
                         <div class="prediction-box">
-                            <div style="font-size: 1.3em; line-height: 2; text-align: center; padding: 20px;">
+                            <div class="sequence-grid">
                                 ${sequenceHtml}
                             </div>
                             ${optIndex === 0 ? `
@@ -858,9 +1185,9 @@ HTML_TEMPLATE = """
                             ${optIndex === 0 && results.input_sequence && results.input_sequence.length ? `
                                 <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #8b5a2b;">
                                     <p style="font-size: 1em; color: #6b4423; margin-bottom: 10px;"><strong>Sequência de entrada:</strong></p>
-                                    <div style="font-size: 1.1em; line-height: 1.8;">
+                                    <div class="sequence-grid">
                                         ${results.input_sequence.map((num) =>
-                                            `<span style="display: inline-block; padding: 6px 10px; margin: 3px; background: #e8dcc6; color: #5a3419; border: 1px solid #8b5a2b; border-radius: 3px; font-weight: normal;">${num}</span>`
+                                            `<span class="num-chip-secondary">${num}</span>`
                                         ).join('')}
                                     </div>
                                 </div>
